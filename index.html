@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Wallet Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/@ethersproject/wallet@5.7.0/dist/wallet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ethersproject/providers@5.7.0/dist/providers.min.js"></script>
+</head>
+<body>
+  <h1>EVM Smart Wallet Generator</h1>
+  <div id="wallet-info">
+    <p><b>Generated Wallet Address:</b> <span id="wallet-address">Not Generated</span></p>
+    <p><b>Wallet Private Key:</b> <span id="private-key">Not Generated</span></p>
+    <button id="connect-wallet">Generate Wallet & Connect</button>
+  </div>
+  <script>
+    const rpcUrl = "http://102.133.148.122:8545/";
+    const chainId = 138;
+
+    document.getElementById('connect-wallet').addEventListener('click', async () => {
+      // Generate a random wallet
+      const wallet = ethers.Wallet.createRandom();
+
+      // Display the wallet info
+      document.getElementById('wallet-address').textContent = wallet.address;
+      document.getElementById('private-key').textContent = wallet.privateKey;
+
+      // Connect to the specified RPC
+      const provider = new ethers.providers.JsonRpcProvider(rpcUrl, {
+        name: "Custom Network",
+        chainId: chainId
+      });
+
+      // Connect wallet to the provider
+      const connectedWallet = wallet.connect(provider);
+
+      console.log("Wallet Address:", connectedWallet.address);
+      console.log("Connected to RPC:", rpcUrl);
+      alert("Wallet connected to RPC successfully!");
+    });
+  </script>
+</body>
+</html>
